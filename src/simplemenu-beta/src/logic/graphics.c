@@ -293,7 +293,7 @@ void drawTransparentRectangleToScreen(int w, int h, int x, int y, int rgbColor[]
 	rectangleDest.h = h;
 	rectangleDest.x = x;
 	rectangleDest.y = y;
-	transparentrectangle = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 16, 0, 0, 0, 0);
+	transparentrectangle = SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 16, 0, 0, 0, 0);
 	SDL_FillRect(transparentrectangle, &rectangleOrig, SDL_MapRGB(transparentrectangle->format, rgbColor[0], rgbColor[1], rgbColor[2]));
 	SDL_SetAlpha(transparentrectangle, SDL_SRCALPHA, opacity);
 	SDL_BlitSurface(transparentrectangle, &rectangleOrig, screen, &rectangleDest);
@@ -472,8 +472,9 @@ int displayCenteredImageOnScreen(char *fileName, char *fallBackText, int scaleTo
 
 void initializeDisplay(int w, int h) {
 	int depth=16;
-#if defined(TARGET_PC) || defined(MIYOOMINI)
-	Uint32 pcflags = SDL_HWSURFACE|SDL_NOFRAME;
+#if defined(TARGET_PC) || defined(MIYOOMINI) || defined(TARGET_RG35XX)
+	Uint32 pcflags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;//SDL_NOFRAME;
+	//Uint32 pcflags = SDL_HWSURFACE | SDL_TRIPLEBUF | SDL_NOFRAME;
 #else
 	Uint32 flags = SDL_SWSURFACE|SDL_NOFRAME;
 #endif
@@ -522,7 +523,7 @@ void initializeDisplay(int w, int h) {
 	fprintf(fp,"0");
 	fclose(fp);
 #endif
-#if defined(TARGET_PC) || defined(MIYOOMINI)
+#if defined(TARGET_PC) || defined(MIYOOMINI) || defined(TARGET_RG35XX)
 	SCREEN_HEIGHT = h;
 	SCREEN_WIDTH = w;
 	char msg[1000];
@@ -530,14 +531,14 @@ void initializeDisplay(int w, int h) {
 	logMessage("INFO", "initializeDisplay", msg);
 	SCREEN_RATIO = (double)SCREEN_WIDTH/SCREEN_HEIGHT;
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, depth, pcflags);
-	char tempString[1000];
-	snprintf(tempString, sizeof(tempString), "%s/.simplemenu/resources/loading.png", getenv("HOME"));
-	SDL_Surface* image;
-	image = IMG_Load(tempString);
-	SDL_BlitSurface(image, NULL, screen, NULL);
-	SDL_Flip(screen);
-	SDL_FreeSurface(image);
-	image = NULL;
+	// char tempString[1000];
+//	snprintf(tempString, sizeof(tempString), "%s/.simplemenu/resources/loading.png", getenv("HOME"));
+//	SDL_Surface* image;
+//	image = IMG_Load(tempString);
+//	SDL_BlitSurface(image, NULL, screen, NULL);
+//	SDL_Flip(screen);
+//	SDL_FreeSurface(image);
+//	image = NULL;
 #else
 	char res[20];
 	sprintf(res, "resolution: %dx%d", w, h);

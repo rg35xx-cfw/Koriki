@@ -387,7 +387,7 @@ void drawTextOnHeader() {
 
 void initializeSettingsFonts() {
 	logMessage("INFO","initializeSettingsFonts","Initializing Settings Fonts");
-	char *akashi = "resources/akashi.ttf";
+	char *akashi = ".simplemenu/resources/akashi.ttf";
 	settingsfont = TTF_OpenFont(akashi, calculateProportionalSizeOrDistance1(14));
 	settingsHeaderFont = TTF_OpenFont(akashi, calculateProportionalSizeOrDistance1(27));
 	settingsStatusFont = TTF_OpenFont(akashi, calculateProportionalSizeOrDistance1(14));
@@ -397,7 +397,7 @@ void initializeSettingsFonts() {
 
 void initializeFonts() {
 	TTF_Init();
-	char *akashi = "resources/akashi.ttf";
+	char *akashi = ".simplemenu/resources/akashi.ttf";
 
 	font = TTF_OpenFont(menuFont, fontSize);
 	outlineFont = TTF_OpenFont(menuFont, fontSize);

@@ -976,12 +976,12 @@ void performSystemSettingsChoosingAction() {
 			}
 		} else if (chosenSetting==BRIGHTNESS_OPTION) {
 			if (keys[BTN_LEFT]) {
-				if (brightnessValue>1) {
-					brightnessValue-=1;
+				if (brightnessValue>50) {
+					brightnessValue-=50;
 				}
 			} else {
 				if (brightnessValue<maxBrightnessValue) {
-					brightnessValue+=1;
+					brightnessValue+=50;
 				}
 			}
 			setBrightness(brightnessValue);

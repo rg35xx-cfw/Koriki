@@ -40,10 +40,12 @@ void initializeGlobals() {
 }
 
 void resetFrameBuffer () {
+#ifndef TARGET_RG35XX
 	int ret = system("./scripts/reset_fb");
 	if (ret==-1) {
 		generateError("FATAL ERROR", 1);
 	}
+#endif
 	logMessage("INFO","resetFrameBuffer","Reset Framebuffer");
 }
 
@@ -150,6 +152,7 @@ void processEvents() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if(event.type==getKeyDown()){
+			printf("EVENT KEY: %d\n",event.key.keysym.sym);
 			if (!isSuspended) {
 				switch (currentState) {
 					case BROWSING_GAME_LIST:
@@ -279,7 +282,7 @@ void processEvents() {
 	logMessage("INFO","main","Setup 1");
 #ifdef TARGET_PC
 	initialSetup(atoi(argv[1]), atoi(argv[2]));
-#elif defined MIYOOMINI
+#elif defined MIYOOMINI || defined TARGET_RG35XX
 	initialSetup(640,480);
 #else
 	initialSetup(320,240);

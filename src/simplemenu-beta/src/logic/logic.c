@@ -9,7 +9,9 @@
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
+#ifndef TARGET_RG35XX
 #include "opk.h"
+#endif
 
 #include <sys/ioctl.h>
 #if defined(TARGET_NPG) || defined(TARGET_OD) || defined TARGET_OD_BETA
@@ -88,7 +90,7 @@ char* getRomRealName(char *romName) {
 }
 
 int getOPK(char *package_path, struct OPKDesktopFile *desktopFiles) {
-#ifndef TARGET_BITTBOY
+#if !defined(TARGET_BITTBOY) && !defined(TARGET_RG35XX)
 	struct OPK *opk = opk_open(package_path);
 	if (opk == NULL) {
 		return 0;
@@ -99,7 +101,7 @@ int getOPK(char *package_path, struct OPKDesktopFile *desktopFiles) {
 	char *terminal;
 
 	int i = 0;
-#ifndef TARGET_BITTBOY
+#if !defined(TARGET_BITTBOY) && !defined(TARGET_RG35XX)
 	while (1) {
 		const char *metadata_name;
 		if (opk_open_metadata(opk, &metadata_name) <= 0) {
@@ -297,10 +299,12 @@ int checkIfEmulatorExists(char *path, char *executable) {
 }
 
 void resetFrameBuffer1() {
+#ifndef TARGET_RG35XX
 	int ret = system("./scripts/reset_fb");
 	if (ret == -1) {
 		generateError("FATAL ERROR", 1);
 	}
+#endif
 }
 
 void executeCommand(char *emulatorFolder, char *executable,	char *fileToBeExecutedWithFullPath, int consoleApp, int frequency) {
@@ -358,11 +362,13 @@ void executeCommand(char *emulatorFolder, char *executable,	char *fileToBeExecut
 		SDL_putenv("SDL_VIDEO_KMSDRM_SCALING_MODE"); //3: not set
 	}
 #endif
+#ifndef TARGET_RG35XX
 	fp = fopen("/sys/class/graphics/fb0/device/allow_downscaling", "w");
 	if (fp != NULL) {
 		fprintf(fp, "%d", 1);
 		fclose(fp);
 	}
+#endif
 
 	logMessage("INFO", "executeCommand", emulatorFolder);
 	logMessage("INFO", "executeCommand", exec);
@@ -396,10 +402,10 @@ void executeCommand(char *emulatorFolder, char *executable,	char *fileToBeExecut
 #endif
 
 	if(consoleApp) {
-		execlp("./invoker.dge", "invoker.dge", emulatorFolder, exec,
+		execlp("invoker.dge", "invoker.dge", emulatorFolder, exec,
 				fileToBeExecutedWithFullPath1, NULL);
 	} else {
-		execlp("./invoker.dge", "invoker.dge", emulatorFolder, exec,
+		execlp("invoker.dge", "invoker.dge", emulatorFolder, exec,
 				fileToBeExecutedWithFullPath, NULL);
 	}
 

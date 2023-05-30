@@ -1,0 +1,67 @@
+# Software Name
+TARGET = simplemenu
+
+CROSS_COMPILE = /opt/cdata/rg35xx/batocera.linux/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-
+
+#Flags
+MM_NOQUIT = 1  # Controls if we show Quit option in Session menu on Miyoo Mini. In that device there is no optional startup script. The closest is /mnt/SDCARD/.tmp_update/updater but we can't count on it because it is used by most distributions, so we control the quit menu manually by mean of this flag.
+NOLOADING = 1  # Controls whether the 'LOADING...' message is displayed at the bottom right of the screen during some slow processes.
+
+# Compiler
+CC = $(CROSS_COMPILE)gcc
+LINKER   = $(CROSS_COMPILE)gcc
+CFLAGS = -DTARGET_RG35XX -O3 -DUSE_GZIP -Ofast -fdata-sections -ffunction-sections -fPIC -flto -Wall -Wextra -std=gnu99
+ifeq ($(MM_NOQUIT), 1)
+	CFLAGS += -DMM_NOQUIT
+endif
+ifeq ($(NOLOADING), 1)
+	CFLAGS += -DNOLOADING
+endif
+
+LIBS += -lSDL -lasound -lSDL_image -lSDL_ttf -L../../../libini/ -lini -lz -lpthread -lm
+
+# You can use Ofast too but it can be more prone to bugs, careful.
+CFLAGS += -g3 -I.
+LDFLAGS = -Wl,--start-group $(LIBS) -Wl,--end-group -Wl,--as-needed -Wl,--gc-sections -flto
+
+DEBUG=NO
+
+#ifeq ($(DEBUG), NO)
+#	CFLAGS +=  -DDEBUG -g3
+#else
+#	LDFLAGS	+=  -s -lm
+#endif
+
+SRCDIR   = src/logic
+OBJDIR   = src/obj
+BINDIR   = output
+SOURCES  := $(wildcard $(SRCDIR)/*.c)
+SOURCES := $(filter-out src/logic/control_rfw.c, $(SOURCES))
+SOURCES := $(filter-out src/logic/control_bittboy.c, $(SOURCES))
+SOURCES := $(filter-out src/logic/control_od.c, $(SOURCES))
+SOURCES := $(filter-out src/logic/system_logic_rfw.c, $(SOURCES))
+SOURCES := $(filter-out src/logic/system_logic_bittboy.c, $(SOURCES))
+SOURCES := $(filter-out src/logic/system_logic_od.c, $(SOURCES))
+SOURCES := $(filter-out src/logic/system_logic_mmiyoo.c, $(SOURCES))
+
+OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+
+rm       = rm -f
+	
+$(BINDIR)/$(TARGET): $(OBJECTS)
+	@$(LINKER) $(OBJECTS) $(LDFLAGS) -o $@
+	@echo "Linking complete!"
+
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "Compiled "$<" successfully!"
+
+.PHONY: clean
+clean:
+	@$(rm) $(OBJECTS)
+	@echo "Cleanup complete!"
+
+.PHONY: remove
+remove: clean
+	@$(rm) $(BINDIR)/$(TARGET)
+	@echo "Executable removed!"
