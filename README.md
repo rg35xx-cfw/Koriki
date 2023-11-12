@@ -1,17 +1,23 @@
-![koriki](images/koriki_logo.png)
 
-# Koriki
+![koriki_logoV3](https://github.com/SzalikDesigns/Koriki/assets/77732736/ed4a96ae-a207-4b75-b364-473c87dc2b68)
 
-Koriki is a software compilation for the microSD card slot of [Miyoo Mini](https://lemiyoo.cn/product/143.html) retro console. It runs over stock firmware and brings mainly the [SimpleMenu](https://github.com/fgl82/simplemenu) frontend to this device.
+# Koriki RG35XX
 
-In this repository you will find all the software pieces to build the compilation, but if you only want to use one of the builds published in [releases](https://github.com/Rparadise-Team/Koriki/releases), see the documentation on the [wiki](https://github.com/Rparadise-Team/Koriki/wiki) for the installation procedure.
+Koriki is a software compilation for the microSD card slot of [Anbernic RG35XX](https://anbernic.com/products/rg35xx) retro console. 
+It runs over stock firmware and brings mainly the [SimpleMenu](https://github.com/fgl82/simplemenu) frontend to this device. 
+
+Please visit [**this**](https://ko-fi.com/acmeplus) page for development updates and other related information.
+
+There is also **work-in-progress** update for frontend called [simplemenu+](https://ko-fi.com/post/Simplermenu-H2H0P654W)
+
+In this repository you will find all the software pieces to build the compilation, but if you only want to use one of the builds published in [releases](https://github.com/rg35xx-cfw/Koriki/releases), see the documentation on the [link](https://retrogamecorps.com/2023/01/03/anbernic-rg35xx-starter-guide/#Koriki) for the installation procedure.
 
 Although more details are given later in the [wiki](https://github.com/Rparadise-Team/Koriki/wiki), like all free software projects, Koriki rely on the work of many other people. The complete list would be endless, but we can not avoid to mention some names that are the most directly have allowed the existence of Koriki:
 
-* @FGL82: For his practical, agile and customizable SimpleMenu frontend.
-* @trngaje: For his SimpleMenu fork for Miyoo Mini that triggered Koriki's idea.
+* [FGL82](https://github.com/fgl82/simplemenu): For his practical, agile and customizable SimpleMenu frontend.
+* [trngaje](https://github.com/trngaje/simplemenu): For his SimpleMenu fork for Miyoo Mini that triggered Koriki's idea.
 * [Eggs](https://discordapp.com/users/778867980096241715): For its mod of RetroArch for the MiyooMini as well as some system mods such as the sound latency reduction system.
-* @shauninman: For its dockerized toolchain and [minimalist distribution](https://github.com/shauninman/MiniUI) concept which has largely inspired Koriki's design.
+* [shauninman](https://github.com/shauninman): For its dockerized toolchain and [minimalist distribution](https://github.com/shauninman/MiniUI) concept which has largely inspired Koriki's design.
 
 ## Components
 
@@ -21,7 +27,7 @@ Once the binaries are in place, the `generate_release.sh` script allows to gener
 
 Listed below are the binaries that you need to build if you want to construct the distribution yourself, as well as the location of their sources. The path to the location indicated for the binaries starts from the root of the microSD card.
 
-The toolchain of @shauninman has been used to build, that can be found [here](https://github.com/shauninman/union-miyoomini-toolchain).
+The toolchain of [shauninman](https://github.com/shauninman) has been used to build, that can be found [here](https://github.com/shauninman/union-miyoomini-toolchain).
 
 #### SimpleMenu
 
@@ -32,7 +38,7 @@ The toolchain of @shauninman has been used to build, that can be found [here](ht
     * libopk: https://github.com/pcercuei/libopk
 * Build command: `make PLATFORM=MMIYOO MM_NOQUIT=1 NOLOADING=1`
 
-#### invoker
+#### Invoker
 
 * Sources: https://github.com/fgl82/invoker
 * Destination of binary: `.simplemenu/invoker.dge`
@@ -83,6 +89,3 @@ The toolchain of @shauninman has been used to build, that can be found [here](ht
 * Sources: https://github.com/Rparadise-Team/Koriki/tree/main/src/showScreen
 * Destination of binary: `Koriki/bin/show`
 
-## Telegram channel for updates
-
-Join this Telegram channel to get update notifications: [https://t.me/Koriki_MiyooMini](https://t.me/Koriki_MiyooMini)
